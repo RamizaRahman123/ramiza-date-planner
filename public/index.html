@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Take me out?</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Figtree:wght@400;500;600&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+  <!-- Passcode gate -->
+  <div class="gate" id="gate" hidden>
+    <form class="gate-card" id="gate-form" novalidate>
+      <h1 class="gate-title">Just for the two of us</h1>
+      <p class="gate-text">Enter our passcode, then tell me who's here.</p>
+
+      <label for="passcode">Passcode</label>
+      <input id="passcode" type="password" autocomplete="current-password" required>
+
+      <fieldset class="who">
+        <legend>I am</legend>
+        <label class="who-option"><input type="radio" name="who" value="her" checked> <span id="who-her">Her</span></label>
+        <label class="who-option"><input type="radio" name="who" value="him"> <span id="who-him">Him</span></label>
+      </fieldset>
+
+      <p class="error" id="gate-error" role="alert"></p>
+      <button type="submit" class="btn btn-primary">Come in</button>
+    </form>
+  </div>
+
+  <main id="app" hidden>
+    <header class="hero">
+      <p class="hero-from" id="hero-from"></p>
+      <h1 class="hero-title" id="hero-title">Take me out?</h1>
+      <p class="hero-text">Pick a day, choose what we'll wear, vote on dinner, and pin our favourite moments to the board.</p>
+      <nav class="hero-nav" aria-label="Sections">
+        <a href="#plan">Plan a date</a>
+        <a href="#wear">What we'll wear</a>
+        <a href="#eat">What we'll eat</a>
+        <a href="#board">Our board</a>
+      </nav>
+    </header>
+
+    <!-- Date scheduler -->
+    <section class="section" id="plan" aria-labelledby="plan-title">
+      <h2 id="plan-title">Plan a date</h2>
+      <div class="plan-grid">
+        <div class="calendar" aria-label="Calendar">
+          <div class="cal-head">
+            <button type="button" class="icon-btn" id="cal-prev" aria-label="Previous month">‹</button>
+            <h3 id="cal-month" aria-live="polite"></h3>
+            <button type="button" class="icon-btn" id="cal-next" aria-label="Next month">›</button>
+          </div>
+          <div class="cal-weekdays" aria-hidden="true">
+            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+          </div>
+          <div class="cal-days" id="cal-days"></div>
+        </div>
+
+        <form class="date-form" id="date-form" novalidate>
+          <h3>Ask for a date</h3>
+          <p class="picked" id="picked-day">Pick a day on the calendar.</p>
+
+          <label for="d-title">What are we doing?</label>
+          <input id="d-title" maxlength="80" placeholder="Dinner by the river" required>
+
+          <div class="row">
+            <div>
+              <label for="d-time">Time</label>
+              <input id="d-time" type="time">
+            </div>
+            <div>
+              <label for="d-outfit">Outfit theme</label>
+              <select id="d-outfit"></select>
+            </div>
+          </div>
+
+          <label for="d-place">Where</label>
+          <input id="d-place" maxlength="120" placeholder="Restaurant, park, rooftop…">
+
+          <label for="d-note">A little note</label>
+          <textarea id="d-note" rows="2" maxlength="300" placeholder="Wear the watch I gave you."></textarea>
+
+          <p class="error" id="date-error" role="alert"></p>
+          <button type="submit" class="btn btn-primary" id="date-submit">Ask for this date</button>
+        </form>
+      </div>
+
+      <h3 class="list-title">Our dates</h3>
+      <ul class="date-list" id="date-list"></ul>
+      <p class="empty" id="date-empty">No dates yet. Pick a day above and ask.</p>
+    </section>
+
+    <!-- Outfits -->
+    <section class="section" id="wear" aria-labelledby="wear-title">
+      <h2 id="wear-title">What we'll wear</h2>
+      <p class="section-text">Choose a theme to see matching colours and what each of us wears.</p>
+      <div class="theme-picker" id="theme-picker" role="tablist" aria-label="Outfit themes"></div>
+      <div class="outfit" id="outfit" role="tabpanel"></div>
+    </section>
+
+    <!-- Food vote -->
+    <section class="section" id="eat" aria-labelledby="eat-title">
+      <h2 id="eat-title">What we'll eat</h2>
+      <p class="section-text">Tap every cuisine you'd enjoy. The one with the most votes wins.</p>
+      <div class="result" id="vote-result" aria-live="polite"></div>
+      <div class="cuisines" id="cuisines"></div>
+      <div class="vote-actions">
+        <button type="button" class="btn btn-quiet" id="vote-reset">Start a new vote</button>
+      </div>
+    </section>
+
+    <!-- Photo board -->
+    <section class="section section-board" id="board" aria-labelledby="board-title">
+      <h2 id="board-title">Our board</h2>
+      <form class="pin-form" id="pin-form" novalidate>
+        <label class="file-btn btn btn-primary">
+          <input type="file" id="pin-file" accept="image/jpeg,image/png,image/webp,image/gif">
+          Choose a photo
+        </label>
+        <input id="pin-caption" maxlength="80" placeholder="Write a caption" aria-label="Caption">
+        <button type="submit" class="btn btn-primary" id="pin-submit">Pin it</button>
+        <p class="pin-chosen" id="pin-chosen"></p>
+        <p class="error" id="pin-error" role="alert"></p>
+      </form>
+      <div class="cork" id="cork">
+        <p class="cork-empty" id="cork-empty">Pin our first photo here.</p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <form class="song-form" id="song-form" novalidate>
+        <span>Our song</span>
+        <input id="song-title" maxlength="80" placeholder="Song name" aria-label="Song name">
+        <label class="file-btn btn btn-quiet">
+          <input type="file" id="song-file" accept="audio/*">
+          <span id="song-file-label">Choose an audio file</span>
+        </label>
+        <button type="submit" class="btn btn-quiet">Set our song</button>
+        <p class="error" id="song-error" role="alert"></p>
+      </form>
+    </footer>
+  </main>
+
+  <!-- Floating record player -->
+  <div class="player" id="player" hidden>
+    <button type="button" class="record" id="play-btn" aria-label="Play our song">
+      <span class="record-label"></span>
+    </button>
+    <span class="player-title" id="player-title">Our song</span>
+    <audio id="audio" loop preload="none"></audio>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "ramiza-date-planner",
+  "version": "1.0.0",
+  "description": "A private date planner for two",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "multer": "^2.0.0"
+  }
+}
